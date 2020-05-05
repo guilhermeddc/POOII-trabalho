@@ -9,6 +9,7 @@ import FileController from './app/controllers/FileController'
 import EventsController from './app/controllers/EventsController'
 import TypeController from './app/controllers/TypeController'
 import AdminController from './app/controllers/AdminController'
+import UserEventController from './app/controllers/UserEventController'
 
 import auth from './app/middlewares/auth'
 
@@ -26,6 +27,9 @@ routes.put('/users', UserController.update)
 routes.get('/admins', AdminController.index)
 routes.post('/events', EventsController.store)
 routes.get('/events', EventsController.index)
+routes.get('/events-of-day', EventsController.indexDay)
+routes.get('/events-of-month', EventsController.indexMonth)
+routes.get('/user-events', UserEventController.index)
 routes.post('/types', TypeController.store)
 routes.get('/types', TypeController.index)
 

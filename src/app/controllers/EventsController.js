@@ -1,4 +1,6 @@
 import * as Yup from 'yup'
+import { Op } from 'sequelize'
+import { startOfMonth, endOfMonth, startOfDay, endOfDay, parseISO } from 'date-fns'
 
 import User from '../models/User';
 import File from '../models/File';
@@ -6,6 +8,96 @@ import Type from '../models/Type';
 import Event from '../models/Event'
 
 class EventController {
+  async indexMonth (req, res) {
+    const { page = 1 } = req.query
+    const { date } = req.query
+    const parsedDate = parseISO(date)
+
+    const events = await Event.findAll({
+      where: {
+        canceled_at: null,
+        date: {
+          [Op.between]: [startOfMonth(parsedDate), endOfMonth(parsedDate)]
+        },
+      },
+      order: ['date'],
+      limit: 6,
+      offset: (page - 1) * 6,
+      attributes: ['id', 'date', 'name', 'address'],
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'name'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'path', 'url']
+            }
+          ]
+        },
+        {
+          model: Type,
+          as: 'type',
+          attributes: ['id', 'name']
+        },
+        {
+          model: File,
+          as: 'image',
+          attributes: ['id', 'path', 'url']
+        }
+      ]
+    })
+
+    return res.json(events);
+  }
+
+  async indexDay (req, res) {
+    const { page = 1 } = req.query
+    const { date } = req.query
+    const parsedDate = parseISO(date)
+
+    const events = await Event.findAll({
+      where: {
+        canceled_at: null,
+        date: {
+          [Op.between]: [startOfDay(parsedDate), endOfDay(parsedDate)]
+        },
+      },
+      order: ['date'],
+      limit: 6,
+      offset: (page - 1) * 6,
+      attributes: ['id', 'date', 'name', 'address'],
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'name'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['id', 'path', 'url']
+            }
+          ]
+        },
+        {
+          model: Type,
+          as: 'type',
+          attributes: ['id', 'name']
+        },
+        {
+          model: File,
+          as: 'image',
+          attributes: ['id', 'path', 'url']
+        }
+      ]
+    })
+
+    return res.json(events);
+  }
+
   async index (req, res) {
     const { page = 1 } = req.query
 
@@ -40,7 +132,7 @@ class EventController {
         }
       ]
     })
-    
+
     return res.json(events);
   }
 
@@ -59,8 +151,7 @@ class EventController {
     }
 
     const { id, id_user, id_type, id_image, name, address, date } = await Event.create(req.body)
-    console.log(req.body);
-    
+
     return res.json({ id, id_user, id_type, id_image, name, address, date })
   }
 

@@ -11,7 +11,6 @@ class TypeController {
     return res.json(types)
   }
   async store (req, res) {
-    console.log(req.body);
     const schema = Yup.object().shape({
       name: Yup.string().required(),
     })

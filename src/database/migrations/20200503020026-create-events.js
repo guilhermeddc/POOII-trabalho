@@ -48,6 +48,10 @@ module.exports = {
         defaultValue: true,
         allowNull: false
       },
+      canceled_at: {
+        type: Sequelize.DATE,
+        allowNull: true
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false

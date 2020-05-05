@@ -3,7 +3,15 @@ import * as Yup from 'yup'
 import Type from '../models/Type'
 
 class TypeController {
+  async index (req, res) {
+    const types = await Type.findAll({
+      attributes: ['id', 'name']
+    })
+
+    return res.json(types)
+  }
   async store (req, res) {
+    console.log(req.body);
     const schema = Yup.object().shape({
       name: Yup.string().required(),
     })
@@ -12,15 +20,10 @@ class TypeController {
       return res.status(400).json({ error: 'Validation fails' })
     }
 
-    const typeExists = await Type.findOne({ where: { name: req.body.name } })
+    const { name } = await Type.create(req.body)
 
-    if (typeExists) {
-      return res.status(400).json({ error: 'Type already exists' })
-    }
 
-    const { id, name } = await Type.create(req.body)
-
-    return res.json({ id, name })
+    return res.json({ name })
   }
 }
 

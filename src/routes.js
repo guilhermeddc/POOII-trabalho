@@ -25,7 +25,9 @@ routes.use(auth)
 routes.put('/users', UserController.update)
 routes.get('/admins', AdminController.index)
 routes.post('/events', EventsController.store)
+routes.get('/events', EventsController.index)
 routes.post('/types', TypeController.store)
+routes.get('/types', TypeController.index)
 
 routes.post('/files', upload.single('file'), FileController.store)
 

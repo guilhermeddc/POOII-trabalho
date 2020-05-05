@@ -1,5 +1,5 @@
-import User from '../models/User';
-import File from '../models/File';
+import User from '../models/User'
+import File from '../models/File'
 
 class AdminController {
   async index (req, res) {
@@ -7,12 +7,12 @@ class AdminController {
       where: { admin: true },
       attributes: ['id', 'name', 'email', 'avatar_id'],
       include: [
-        { model: File, as: 'avatar', attributes: ['name', 'path', 'url'] },
-      ],
-    });
+        { model: File, as: 'avatar', attributes: ['name', 'path', 'url'] }
+      ]
+    })
 
-    return res.json(admins);
+    return res.json(admins)
   }
 }
 
-export default new AdminController();
+export default new AdminController()
